@@ -2,6 +2,11 @@
 
 Formato basado en Keep a Changelog. Versionado semántico.
 
+## [1.1.1]
+### Corregido
+- Docstring de `/hello`: `@param name` provocaba una advertencia de Doxygen porque `name` es un parámetro de la URL, no de la función (detectado por el build #1).
+- Las notificaciones por correo ya no marcan el build como FAILURE si no hay servidor SMTP; la alerta queda siempre en la consola.
+
 ## [1.1.0]
 ### Añadido
 - Jenkinsfile con stages Build, Test, Generate Documentation, Version Control y Deploy.

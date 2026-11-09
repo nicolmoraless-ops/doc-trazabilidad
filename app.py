@@ -19,10 +19,10 @@ def hello():
     """!
     @brief Endpoint para saludar al usuario.
 
-    @details Lee el parámetro de consulta "name". Si no viene, usa "Mundo".
+    @details Lee el parámetro de consulta "name" (nombre del usuario) desde
+             la URL, por ejemplo /hello?name=Duoc. Si no viene, usa "Mundo".
              El valor se escapa para evitar XSS reflejado.
 
-    @param name (str, query string) Nombre del usuario.
     @return str Mensaje de saludo.
     """
     name = request.args.get('name', 'Mundo')

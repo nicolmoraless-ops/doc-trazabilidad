@@ -1,4 +1,16 @@
 // Pipeline de CI/CD con documentación y trazabilidad (Actividad 3.4.2)
+
+// Deja la alerta en la consola y la envía por correo. Si el servidor SMTP
+// no está configurado, el envío falla sin cambiar el resultado del build.
+def notificar(String asunto, String cuerpo) {
+    echo "ALERTA >> ${asunto}\n${cuerpo}"
+    try {
+        mail to: env.NOTIFY_EMAIL, subject: asunto, body: cuerpo
+    } catch (err) {
+        echo "No se pudo enviar el correo (configura SMTP en Administrar Jenkins > System): ${err.message}"
+    }
+}
+
 pipeline {
     agent any
 
@@ -107,14 +119,12 @@ pipeline {
             echo "Pipeline OK. Documentación en la rama '${DOCS_BRANCH}' y en los artefactos del build."
         }
         unstable {
-            mail to: env.NOTIFY_EMAIL,
-                 subject: "UNSTABLE: ${env.JOB_NAME} #${env.BUILD_NUMBER} - problemas de documentación",
-                 body: "Revisa docs/doc-report.md en ${env.BUILD_URL}artifact/docs/doc-report.md"
+            notificar("UNSTABLE: ${env.JOB_NAME} #${env.BUILD_NUMBER} - problemas de documentación",
+                      "Revisa docs/doc-report.md en ${env.BUILD_URL}artifact/docs/doc-report.md")
         }
         failure {
-            mail to: env.NOTIFY_EMAIL,
-                 subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "El pipeline falló. Consola: ${env.BUILD_URL}console"
+            notificar("FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                      "El pipeline falló. Consola: ${env.BUILD_URL}console")
         }
     }
 }
