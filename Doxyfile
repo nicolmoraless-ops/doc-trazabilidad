@@ -1,0 +1,20 @@
+# Doxyfile configuration for Doxygen
+PROJECT_NAME           = "Ejemplo Python Flask"
+PROJECT_NUMBER         = 1.1.0
+OUTPUT_DIRECTORY       = "docs"
+OUTPUT_LANGUAGE        = Spanish
+INPUT                  = . README.md
+FILE_PATTERNS          = *.py *.md
+RECURSIVE              = YES
+EXCLUDE                = venv docs tests jenkins
+USE_MDFILE_AS_MAINPAGE = README.md
+OPTIMIZE_OUTPUT_JAVA   = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HAVE_DOT               = NO
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_LOGFILE           = docs/doxygen-warnings.log
