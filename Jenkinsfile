@@ -76,22 +76,29 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: env.GIT_CREDS,
                                                   usernameVariable: 'GIT_USER',
                                                   passwordVariable: 'GIT_TOKEN')]) {
+                    // Se trabaja en una carpeta temporal aparte: el workspace no se toca
+                    // y la rama docs conserva el historial de cada versión de la doc.
                     sh '''
                         SRC_COMMIT=$(git rev-parse --short HEAD)
                         REPO=$(git config --get remote.origin.url | sed -e 's#^https://##' -e 's#^.*@##')
+                        URL="https://${GIT_USER}:${GIT_TOKEN}@${REPO}"
                         TMP=$(mktemp -d)
+                        trap 'rm -rf "$TMP"' EXIT
+
+                        if ! git clone -q --depth 50 --branch "$DOCS_BRANCH" "$URL" "$TMP" 2>/dev/null; then
+                            git init -q "$TMP"
+                            git -C "$TMP" checkout -q -b "$DOCS_BRANCH"
+                        fi
+                        find "$TMP" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
                         cp -r docs/. "$TMP/"
 
+                        cd "$TMP"
                         git config user.name  "Jenkins CI"
                         git config user.email "jenkins@localhost"
-                        git checkout --orphan "$DOCS_BRANCH-tmp"
-                        git rm -rf --cached . > /dev/null
-                        find . -mindepth 1 -maxdepth 1 ! -name .git ! -name venv -exec rm -rf {} +
-                        cp -r "$TMP/." .
                         git add -A
-                        git commit -m "docs: build #${BUILD_NUMBER} desde ${SRC_COMMIT}"
-                        git push -f "https://${GIT_USER}:${GIT_TOKEN}@${REPO}" "HEAD:refs/heads/${DOCS_BRANCH}"
-                        rm -rf "$TMP"
+                        git commit -q -m "docs: build #${BUILD_NUMBER} desde ${SRC_COMMIT}" || echo "Sin cambios en la documentación"
+                        git push -q "$URL" "HEAD:refs/heads/${DOCS_BRANCH}"
+                        git log --oneline -3
                     '''
                 }
             }
@@ -99,7 +106,6 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                checkout scm   // volver al código después del stage anterior
                 sh '''
                     "$VENV/bin/pip" install --quiet -r requirements.txt
                     if [ -f /tmp/flask-app.pid ]; then kill $(cat /tmp/flask-app.pid) 2>/dev/null || true; fi
