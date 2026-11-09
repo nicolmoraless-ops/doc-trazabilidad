@@ -134,13 +134,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Endpoint para saludar al usuario. </p>
-<p>Lee el parámetro de consulta "name". Si no viene, usa "Mundo". El valor se escapa para evitar XSS reflejado.</p>
-<dl class="params"><dt>Parámetros</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>(str, query string) Nombre del usuario. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Lee el parámetro de consulta "name" (nombre del usuario) desde la URL, por ejemplo /hello?name=Duoc. Si no viene, usa "Mundo". El valor se escapa para evitar XSS reflejado.</p>
 <dl class="section return"><dt>Devuelve</dt><dd>str Mensaje de saludo. </dd></dl>
 
 </div>

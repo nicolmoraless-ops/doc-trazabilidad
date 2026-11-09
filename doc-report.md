@@ -1,18 +1,16 @@
 # Informe de documentación y trazabilidad
 
-- Fecha: 2026-11-09T22:37:24
-- Build Jenkins: #1
-- Commit: 8a3ce51
+- Fecha: 2026-11-09T22:48:42
+- Build Jenkins: #3
+- Commit: 1bd8a5e
 - Autor del commit: nicolmoraless-ops <xixoposting@gmail.com>
-- Mensaje: feat: app Flask documentada, Doxyfile y Jenkinsfile
+- Mensaje: fix: stage Version Control usa carpeta temporal y conserva historial de docs
 - Cobertura de docstrings: 5/5 (100.0 %), mínimo 80 %
-- Advertencias de Doxygen: 1
+- Advertencias de Doxygen: 0
 
-
-## Advertencias de Doxygen
-
-- /var/jenkins_home/workspace/doc-trazabilidad/app.py:22: warning: app.hello has @param documentation sections but no arguments
 
 ## Últimos commits
 
+- 1bd8a5e 2026-11-09 nicolmoraless-ops: fix: stage Version Control usa carpeta temporal y conserva historial de docs
+- 58353f2 2026-11-09 nicolmoraless-ops: fix: corrige advertencia de Doxygen en /hello y alertas sin SMTP
 - 8a3ce51 2026-11-09 nicolmoraless-ops: feat: app Flask documentada, Doxyfile y Jenkinsfile
